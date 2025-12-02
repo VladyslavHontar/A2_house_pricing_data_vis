@@ -1,0 +1,16 @@
+# European Housing Price Index Dashboard Requirements
+# Team: DataViz Duo
+
+# Core Dashboard Framework
+dash>=2.14.0
+dash-bootstrap-components>=1.5.0
+
+# Data Processing
+pandas>=2.2.0
+numpy>=1.26.0
+
+# Visualization
+plotly>=5.18.0
+
+# Additional utilities
+python-dateutil>=2.8.0
