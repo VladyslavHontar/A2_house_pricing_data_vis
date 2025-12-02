@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This report presents an interactive dashboard for analyzing European housing price trends from 2010 to 2024. The project addresses the challenge faced by young professionals and students who want to compare housing costs across different European countries before relocating. Our dashboard uses official data from Eurostat covering over 30,000 records from 30+ countries.
+This report presents an interactive dashboard for analyzing European housing price trends from 2010 to 2024. The project addresses the challenge faced by young professionals and students who want to compare housing costs across different European countries before relocating. Our dashboard uses official data from Eurostat covering over 30,000 records from 30 European countries.
 
 We created four interactive visualizations: a geographic map showing price distribution, a bar chart ranking countries, a time series chart showing trends, and a scatter plot analyzing growth patterns. The analysis shows that housing prices increased significantly in most European countries since 2010, with the highest growth in countries like Turkey, Czech Republic, and Hungary. The dashboard loads in under 3 seconds and uses color-blind safe design to ensure accessibility.
 
@@ -27,17 +27,17 @@ For example, a student from Poland who wants to study in France must search mult
 
 ### 1.2 Our Solution
 
-We created an interactive web dashboard that brings all this information together in one place. Users can compare housing costs across 30+ European countries from 2010 to present. The dashboard shows data in a simple, visual way that anyone can understand without technical knowledge.
+We created an interactive web dashboard that brings all this information together in one place. Users can compare housing costs across 30 European countries from 2010 to present. The dashboard shows data in a simple, visual way that anyone can understand without technical knowledge.
 
 ### 1.3 Success Metrics
 
 We set clear goals to measure if our project was successful:
 
-1. **Coverage:** Show data for at least 30 European countries ✓ (achieved: 30+ countries)
+1. **Coverage:** Show data for at least 30 European countries ✓ (achieved: 30 countries)
 2. **Time period:** Display trends from 2010 to present with quarterly updates ✓ (achieved: 2010-2024)
 3. **Performance:** Dashboard loads in less than 3 seconds ✓ (achieved: ~2 seconds)
 4. **Usability:** Interactive and easy to understand without explanation ✓
-5. **Accessibility:** Color-blind safe visualizations ✓ (used ColorBrewer palettes)
+5. **Accessibility:** Color-blind safe visualizations ✓ (used ColorBrewer RdYlGn palette)
 6. **Transparency:** Clear labels and descriptions on all charts ✓
 
 All success metrics were achieved or exceeded.
@@ -52,15 +52,15 @@ We used official data from **Eurostat**, the statistical office of the European 
 
 **Dataset details:**
 - **Name:** House Price Index (HPI)
-- **Size:** 30,307 records after cleaning
-- **Countries:** 30+ European nations
-- **Time period:** 2010-Q1 to 2024-Q3 (quarterly data)
-- **Baseline:** All prices indexed to 2010 = 100
+- **Size:** 30,307 raw records, approximately 25,000 after cleaning
+- **Countries:** 30 European nations (Switzerland excluded due to invalid data)
+- **Time period:** 2010-Q1 to 2024-Q2 (quarterly data)
+- **Baseline:** Dynamic - relative to your selected start year (originally 2010 = 100)
 - **Format:** CSV file (prc_hpi_q_linear_2_0.csv)
 - **License:** Open for educational use
 - **Download date:** November 2024
 
-The dataset includes EU member states plus some non-EU countries like Turkey, Norway, Switzerland, and United Kingdom.
+The dataset includes EU member states plus some non-EU countries like Turkey, Norway, and United Kingdom. Note: Switzerland data was excluded due to invalid price index values (below normal range).
 
 ### 2.2 Data Processing Pipeline
 
@@ -74,13 +74,15 @@ Our data processing followed these steps:
 - Removed rows with missing price values
 - Excluded aggregate regions (like "European Union" or "Euro area") to avoid double-counting
 - Removed duplicate entries for same country and time period
-- Filtered out extreme outliers (values below 0 or above 500)
+- Filtered out extreme outliers (values below 10 or above 500)
+- Filtered out future/incomplete data (only kept data up to 2024)
 
 **Step 3: Data Transformation**
 - Renamed columns to clear English names (country_code, country_name, time_period, price_index)
 - Parsed time periods (e.g., "2023-Q1") into separate year and quarter columns
 - Created date column for time series analysis
-- Fixed country names for consistency (e.g., "Czechia" → "Czech Republic")
+- Fixed country names for consistency (e.g., "Czechia" → "Czech Republic", "Türkiye" → "Turkey")
+- Implemented dynamic rebasing: price indices are recalculated relative to user-selected start year
 
 **Step 4: Data Validation**
 - Checked for logical errors (e.g., prices cannot be negative)
@@ -117,7 +119,7 @@ Our analysis has some important limitations:
 
 1. **Country-level only:** Data shows average prices for entire countries, not individual cities or neighborhoods. Housing in capital cities is usually much more expensive than rural areas, but our data does not show this detail.
 
-2. **Index values, not actual prices:** The data shows relative changes (index = 100 in 2010), not actual prices in euros or dollars. An index of 150 means prices are 50% higher than 2010, but we cannot see the actual cost of a house.
+2. **Index values, not actual prices:** The data shows relative changes (index = 100 at your selected start year), not actual prices in euros or dollars. An index of 150 means prices are 50% higher than the baseline year, but we cannot see the actual cost of a house.
 
 3. **Time lag:** Eurostat data has a 3-6 month delay. The latest data may not reflect very recent changes in the market.
 
@@ -135,9 +137,9 @@ These limitations mean users should use our dashboard for general comparison and
 
 Our dashboard presents four main visualizations that work together to tell the story of European housing prices.
 
-### 3.1 Geographic Overview: Choropleth Map (Figure 1)
+### 3.1 Geographic Overview: World Map (Figure 1)
 
-The first visualization is a color-coded map of Europe showing the housing price index for each country. Countries with higher prices appear in red/orange colors, while countries with lower prices appear in green colors. This gives users an immediate visual understanding of geographic patterns.
+The first visualization is a color-coded world map showing the housing price index for each European country. The map uses a Natural Earth projection showing the full world context. Countries with higher prices appear in red colors, while countries with lower prices appear in green colors. This gives users an immediate visual understanding of geographic patterns. The map is fully interactive - users can pan and zoom to explore different regions.
 
 **Key findings from the map:**
 - Clear divide between Western and Eastern Europe
@@ -157,7 +159,7 @@ The second visualization is a horizontal bar chart showing the top 15 countries 
 - Countries like Italy and Greece show more stable or slower growth
 - Most countries are above the 100 baseline, meaning prices increased since 2010
 
-The bar chart uses a color gradient (blue to red) to reinforce the ranking, making it easy to see differences at a glance.
+The bar chart uses a color gradient (green to red) to reinforce the ranking, where green represents lower/better prices and red represents higher/worse prices, making it easy to see differences at a glance.
 
 ### 3.3 Trends Over Time: Line Chart (Figure 3)
 
@@ -174,7 +176,7 @@ Users can click on country names in the legend to show or hide specific lines, m
 
 ### 3.4 Growth Analysis: Scatter Plot (Figure 4)
 
-The fourth visualization is a scatter plot comparing starting prices (2010 or earliest available) with ending prices (2024 or latest available). The size of each bubble represents the growth percentage.
+The fourth visualization is a scatter plot comparing starting prices with ending prices for the selected year range. Unlike other charts that use dynamic rebasing, this scatter plot uses the original 2010=100 baseline to show the actual distribution and spread of housing prices across countries. The size of each bubble represents the growth percentage, and the color indicates whether growth was positive (green) or negative (red).
 
 **Key findings from growth analysis:**
 - Countries above the diagonal line experienced growth
@@ -200,9 +202,9 @@ These metrics give users quick summary statistics without needing to study all t
 
 Two main controls let users filter and explore the data:
 
-1. **Year range slider:** Users can select any time period from 2010 to 2024. All charts update automatically to show only that period. This helps users focus on specific time frames like "before COVID" or "recent years."
+1. **Year range slider:** Users can select any time period from 2010 to 2024. All charts update automatically to show only that period. **Importantly, the left handle (start year) sets the baseline** - all price indices are recalculated relative to this year. For example, if you select 2015-2020, all prices will be shown relative to 2015 = 100. This allows flexible comparison of any time period. The scatter plot is an exception and always uses the original 2010 baseline.
 
-2. **Country selector:** A multi-select dropdown lets users choose which countries to display in the time series chart. By default, we show five major countries (Germany, France, Italy, Spain, UK), but users can add or remove countries as needed.
+2. **Country selector:** A multi-select dropdown lets users choose which countries to display across all charts. By default (when empty), the map and bar chart show all 30 countries, while the time series chart shows the top 10 countries by latest price index for readability. Users can select specific countries to focus their analysis.
 
 ---
 
@@ -240,7 +242,7 @@ We addressed these biases by clearly documenting them and advising users to cons
 
 We designed the dashboard to be accessible to diverse users:
 
-**Color-blind safe palettes:** We use ColorBrewer palettes (RdYlGn) and Viridis color schemes that are designed to be distinguishable by people with color vision deficiencies. We tested the colors using color-blind simulation tools.
+**Color-blind safe palettes:** We use the ColorBrewer RdYlGn_r (reversed Red-Yellow-Green) palette that is designed to be distinguishable by people with color vision deficiencies. This palette consistently shows green for lower/better values and red for higher/worse values across all visualizations.
 
 **Multiple visual encodings:** We don't rely only on color. Charts also use position, size, and text labels to convey information. For example, the bar chart shows both color and length.
 
@@ -334,7 +336,7 @@ Through this project, we learned several important lessons:
 
 ## 6. Conclusion
 
-This project successfully created an interactive dashboard for exploring European housing price trends. We achieved all our success metrics: coverage of 30+ countries, data from 2010-2024, fast loading times, and accessible design.
+This project successfully created an interactive dashboard for exploring European housing price trends. We achieved all our success metrics: coverage of 30 countries, data from 2010-2024, fast loading times, and accessible design.
 
 The analysis reveals important patterns in European housing markets, including significant price growth in most countries since 2010, regional differences between Western and Eastern Europe, and the impact of events like the COVID-19 pandemic. The interactive nature of the dashboard allows users to explore these patterns in ways that match their interests and needs.
 
@@ -386,19 +388,36 @@ The browser should display the interactive dashboard with all four visualization
 
 ### File Structure
 ```
-A2_house_pricing_data_vis123/
+A2_house_pricing_data_vis/
 ├── data/
 │   └── prc_hpi_q_linear_2_0.csv    # Raw data from Eurostat
 ├── src/
 │   ├── callbacks/                   # Dashboard interactivity logic
-│   ├── components/                  # Dashboard layout components
-│   ├── data_processing/             # Data loading and cleaning
-│   └── visualizations/              # Chart creation functions
+│   │   ├── metrics_callback.py      # Metrics card updates
+│   │   ├── map_callback.py          # World map updates
+│   │   ├── bar_chart_callback.py    # Bar chart updates
+│   │   ├── line_chart_callback.py   # Time series updates
+│   │   ├── scatter_callback.py      # Scatter plot updates
+│   │   └── callbacks_registry.py    # Central callback registration
+│   ├── components/                  # UI layout components
+│   │   ├── header.py                # Page header
+│   │   ├── filters.py               # Filter controls
+│   │   ├── metrics.py               # Metrics cards
+│   │   └── layout.py                # Main layout assembly
+│   ├── data_processing/             # Data layer
+│   │   └── data_loader.py           # Data loading, cleaning, rebasing
+│   └── visualizations/              # Pure visualization functions
+│       ├── map_viz.py               # World map creation
+│       ├── bar_chart_viz.py         # Bar chart creation
+│       ├── line_chart_viz.py        # Line chart creation
+│       └── scatter_viz.py           # Scatter plot creation
 ├── config/
-│   └── settings.py                  # Configuration parameters
-├── app.py                           # Main application file
+│   └── settings.py                  # Configuration constants
+├── app.py                           # Main application entry point
+├── dashboard_old_backup.py          # Backup of old monolithic version
 ├── requirements.txt                 # Python dependencies
-└── README.md                        # Full documentation
+├── README.md                        # Full documentation
+└── ARCHITECTURE.md                  # Clean architecture documentation
 ```
 
 ### Troubleshooting
