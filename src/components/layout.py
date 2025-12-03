@@ -64,10 +64,37 @@ def create_layout(countries, years):
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader([
-                        html.H5("Price Trends Over Time", className="text-white mb-1",
-                               style={'font-weight': 'bold'}),
-                        html.Small("Watch how housing prices changed over the years. Lines going up = prices increased, lines going down = prices decreased. The gray dotted line shows the baseline (no change)",
-                                 className="text-white-50")
+                        html.Div([
+                            html.Div([
+                                html.H5("Price Trends Over Time", className="text-white mb-0",
+                                       style={'font-weight': 'bold', 'display': 'inline-block', 'margin-right': '15px'}),
+                                html.Div([
+                                    html.Span("Show: ", className="text-white me-2", style={'font-size': '0.9rem'}),
+                                    dcc.Dropdown(
+                                        id='line-chart-country-limit',
+                                        options=[
+                                            {'label': 'Top 5', 'value': 5},
+                                            {'label': 'Top 10', 'value': 10},
+                                            {'label': 'Top 15', 'value': 15},
+                                            {'label': 'Top 20', 'value': 20},
+                                            {'label': 'All Countries', 'value': 9999}
+                                        ],
+                                        value=10,
+                                        clearable=False,
+                                        style={'font-size': '0.85rem', 'width': '130px', 'display': 'inline-block', 'vertical-align': 'middle', 'margin-right': '15px'}
+                                    ),
+                                    dbc.ButtonGroup([
+                                        dbc.Button("Most Growth", id="btn-most-growth", color="light", outline=False, size="sm",
+                                                  style={'font-weight': '500'}),
+                                        dbc.Button("Least Growth", id="btn-least-growth", color="light", outline=True, size="sm",
+                                                  style={'font-weight': '500'})
+                                    ], size="sm", style={'display': 'inline-block', 'vertical-align': 'middle'})
+                                ], style={'display': 'inline-block'})
+                            ], className="mb-2"),
+                            html.Small("When no countries selected, shows top countries by growth. Lines going up = prices increased, down = decreased",
+                                     className="text-white-50"),
+                            dcc.Store(id='line-chart-sort-order', data='most_growth')
+                        ])
                     ], style={'background-color': '#34495e', 'padding': '1rem'}),
                     dbc.CardBody([
                         dcc.Graph(id='price-time-series', config={'displayModeBar': True})
