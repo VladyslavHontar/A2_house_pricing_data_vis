@@ -18,7 +18,7 @@ def create_metrics():
                 dbc.CardBody([
                     html.H3(id="metric-highest", className="card-title text-success mb-1",
                            style={'font-weight': 'bold', 'font-size': '1.3rem'}),
-                    html.P("Highest Growth", className="card-text text-muted mb-0",
+                    html.P("Most Expensive Now", className="card-text text-muted mb-0",
                           style={'font-size': '0.9rem'})
                 ], className="text-center")
             ], style={'box-shadow': '0 2px 4px rgba(0,0,0,0.1)', 'border': 'none'})
@@ -28,7 +28,7 @@ def create_metrics():
                 dbc.CardBody([
                     html.H3(id="metric-lowest", className="card-title text-danger mb-1",
                            style={'font-weight': 'bold', 'font-size': '1.3rem'}),
-                    html.P("Lowest Growth", className="card-text text-muted mb-0",
+                    html.P("Most Affordable Now", className="card-text text-muted mb-0",
                           style={'font-size': '0.9rem'})
                 ], className="text-center")
             ], style={'box-shadow': '0 2px 4px rgba(0,0,0,0.1)', 'border': 'none'})

@@ -1,7 +1,25 @@
 import plotly.express as px
+import plotly.graph_objects as go
 from config import settings
 
 def create_line_chart(filtered_df, base_year):
+    if len(filtered_df) == 0:
+        fig = go.Figure()
+        fig.update_layout(
+            title='No data available for selected filters',
+            height=400,
+            annotations=[{
+                'text': 'Please adjust your filters to see data',
+                'xref': 'paper',
+                'yref': 'paper',
+                'x': 0.5,
+                'y': 0.5,
+                'showarrow': False,
+                'font': {'size': 16}
+            }]
+        )
+        return fig
+
     fig = px.line(
         filtered_df,
         x='date',

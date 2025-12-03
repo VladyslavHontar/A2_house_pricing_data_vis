@@ -17,7 +17,7 @@ def create_layout(countries, years):
                     dbc.CardHeader([
                         html.H5("World Map - Housing Price Index", className="text-white mb-1",
                                style={'font-weight': 'bold'}),
-                        html.Small("Showing 30 European countries with housing data. Pan and zoom to explore. Includes Turkey on the eastern side",
+                        html.Small("See which countries have the most expensive housing (red) vs most affordable (green). Higher numbers = more expensive compared to your selected baseline year",
                                  className="text-white-50")
                     ], style={'background-color': '#34495e', 'padding': '1rem'}),
                     dbc.CardBody([
@@ -37,10 +37,21 @@ def create_layout(countries, years):
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader([
-                        html.H5("Top Countries", className="text-white mb-1",
-                               style={'font-weight': 'bold'}),
-                        html.Small("Countries with highest price indices",
-                                 className="text-white-50")
+                        html.Div([
+                            html.Div([
+                                html.H5("Top 15 Countries", className="text-white mb-0",
+                                       style={'font-weight': 'bold', 'display': 'inline-block', 'margin-right': '15px'}),
+                                dbc.ButtonGroup([
+                                    dbc.Button("Most Expensive", id="btn-expensive", color="light", outline=False, size="sm",
+                                              style={'font-weight': '500'}),
+                                    dbc.Button("Most Affordable", id="btn-affordable", color="light", outline=True, size="sm",
+                                              style={'font-weight': '500'})
+                                ], size="sm", style={'display': 'inline-block'})
+                            ], className="mb-2"),
+                            html.Small("Colors match the map: red=expensive, green=affordable",
+                                     className="text-white-50"),
+                            dcc.Store(id='bar-chart-sort', data='expensive')
+                        ])
                     ], style={'background-color': '#34495e', 'padding': '1rem'}),
                     dbc.CardBody([
                         dcc.Graph(id='price-bar-chart', config={'displayModeBar': False})
@@ -55,7 +66,7 @@ def create_layout(countries, years):
                     dbc.CardHeader([
                         html.H5("Price Trends Over Time", className="text-white mb-1",
                                style={'font-weight': 'bold'}),
-                        html.Small("Compare how housing prices changed for selected countries",
+                        html.Small("Watch how housing prices changed over the years. Lines going up = prices increased, lines going down = prices decreased. The gray dotted line shows the baseline (no change)",
                                  className="text-white-50")
                     ], style={'background-color': '#34495e', 'padding': '1rem'}),
                     dbc.CardBody([
@@ -71,7 +82,7 @@ def create_layout(countries, years):
                     dbc.CardHeader([
                         html.H5("Growth Analysis", className="text-white mb-1",
                                style={'font-weight': 'bold'}),
-                        html.Small("Compare starting vs ending prices. Color: Green=increase, Yellow=no change, Red=decrease. Size=magnitude",
+                        html.Small("Each bubble is a country. Countries above the diagonal line got MORE expensive. Bigger bubbles = bigger change. Green = increase, Red = decrease",
                                  className="text-white-50")
                     ], style={'background-color': '#34495e', 'padding': '1rem'}),
                     dbc.CardBody([

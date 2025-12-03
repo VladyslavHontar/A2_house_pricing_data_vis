@@ -1,6 +1,24 @@
 import plotly.express as px
+import plotly.graph_objects as go
 
 def create_map(latest_data, base_year):
+    if len(latest_data) == 0:
+        fig = go.Figure()
+        fig.update_layout(
+            title='No data available for selected filters',
+            height=400,
+            annotations=[{
+                'text': 'Please adjust your filters to see data',
+                'xref': 'paper',
+                'yref': 'paper',
+                'x': 0.5,
+                'y': 0.5,
+                'showarrow': False,
+                'font': {'size': 16}
+            }]
+        )
+        return fig
+
     fig = px.choropleth(
         latest_data,
         locations='country_name',
