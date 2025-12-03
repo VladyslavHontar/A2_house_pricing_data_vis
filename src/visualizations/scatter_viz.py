@@ -43,7 +43,7 @@ def create_scatter(filtered_df, year_range):
             size=normalized_sizes,
             sizemode='diameter',
             color=growth_df['growth_pct'],
-            colorscale='RdYlGn',
+            colorscale='RdYlGn_r',
             cmid=0,
             cmin=-max_abs_pct,
             cmax=max_abs_pct,
